@@ -5,10 +5,11 @@ mod portal_proof {
     use ink::prelude::string::String;
     use ink::storage::Mapping;
 
-    #[derive(
-        Debug, Clone, Copy, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo,
+    #[derive(Debug, Clone, Copy, PartialEq, Eq, scale::Encode, scale::Decode)]
+    #[cfg_attr(
+        feature = "std",
+        derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
     )]
-    #[cfg_attr(feature = "std", derive(ink::storage::traits::StorageLayout))]
     pub enum ProofStatus {
         Pending,
         Confirmed,
@@ -16,8 +17,11 @@ mod portal_proof {
         Revoked,
     }
 
-    #[derive(Clone, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo)]
-    #[cfg_attr(feature = "std", derive(Debug, ink::storage::traits::StorageLayout))]
+    #[derive(Clone, PartialEq, Eq, scale::Encode, scale::Decode)]
+    #[cfg_attr(
+        feature = "std",
+        derive(Debug, scale_info::TypeInfo, ink::storage::traits::StorageLayout)
+    )]
     pub struct ProofRecord {
         pub id: u64,
         pub issuer: AccountId,
@@ -31,8 +35,11 @@ mod portal_proof {
         pub updated_at: Timestamp,
     }
 
-    #[derive(Debug, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo)]
-    #[cfg_attr(feature = "std", derive(ink::storage::traits::StorageLayout))]
+    #[derive(Debug, PartialEq, Eq, scale::Encode, scale::Decode)]
+    #[cfg_attr(
+        feature = "std",
+        derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
+    )]
     pub enum Error {
         NotFound,
         OnlyIssuer,

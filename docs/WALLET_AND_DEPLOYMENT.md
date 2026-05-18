@@ -11,6 +11,7 @@ This project targets Portaldot mainnet.
 | Token | `POT` |
 | Decimals | `14` |
 | Contract pallet | `Contracts` |
+| Explorer | https://portalscan.portaldot.io/ |
 
 Sources:
 
@@ -22,7 +23,7 @@ Sources:
 ## Get a Compatible Wallet
 
 1. Open https://www.portaldot.world/.
-2. Use the Portaldot Wallet link from the website footer or infrastructure section.
+2. Use the Portaldot Wallet link from the website footer or infrastructure section: https://chromewebstore.google.com/detail/portaldot-wallet/cpdecangbhmfijmlmjglfcocfpaojceo
 3. Install the browser extension.
 4. Create a new account.
 5. Back up the seed phrase offline.
@@ -49,6 +50,7 @@ The contract is written with stable ink! `5.1.1`, matching the Portaldot docs' S
 ```bash
 cd contracts/portal_proof
 cargo test
+cargo build --release --target wasm32-unknown-unknown --no-default-features
 ```
 
 To generate deployable artifacts, install a compatible `cargo-contract` version and build:
@@ -60,6 +62,13 @@ cargo contract build --release
 ```
 
 Expected artifacts are generated under `contracts/portal_proof/target/ink/`.
+
+If `cargo-contract` is not available yet, the raw Wasm compile check still verifies that the contract is Wasm-ready:
+
+```bash
+cd contracts/portal_proof
+cargo build --release --target wasm32-unknown-unknown --no-default-features
+```
 
 ## Deployment Path
 
@@ -77,3 +86,15 @@ After the contract artifact is produced, deploy it with either:
 - a local deployment script using the Portaldot Python SDK pattern.
 
 For safety, keep the first public deployment tiny: deploy, create one test proof, confirm it, and record the contract address plus transaction hashes for the demo video.
+
+## Optional Deployment Helper
+
+After generating the ink! metadata and Wasm files, you can deploy with:
+
+```bash
+pip install -r scripts/requirements.txt
+$env:PORTALPROOF_DEPLOYER_URI = "<local secret URI>"
+python scripts/deploy_portal_proof.py --metadata <path-to-json> --wasm <path-to-wasm>
+```
+
+Only set `PORTALPROOF_DEPLOYER_URI` locally. Do not commit it, paste it into chat, or put it in a `.env` file that might be uploaded.

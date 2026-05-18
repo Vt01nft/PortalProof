@@ -41,6 +41,7 @@ npm run dev
 ```bash
 cd contracts/portal_proof
 cargo test
+cargo build --release --target wasm32-unknown-unknown --no-default-features
 ```
 
 ## Build For Deployment
@@ -56,6 +57,8 @@ cargo contract build --release
 The generated contract artifact can be deployed to Portaldot. Deployment and contract calls require a Portaldot-compatible wallet funded with POT for gas.
 
 See `docs/WALLET_AND_DEPLOYMENT.md` for wallet setup, POT gas notes, Portaldot chain settings, and the planned deployment path.
+
+An optional deployment helper is available at `scripts/deploy_portal_proof.py`. It expects generated ink! metadata and Wasm files plus a local `PORTALPROOF_DEPLOYER_URI` environment variable.
 
 ## Portaldot Settings
 
