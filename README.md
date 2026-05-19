@@ -2,12 +2,12 @@
 
 PortalProof is a Portaldot hackathon MVP for proof-of-delivery records and real-world asset certificates.
 
-Issuers create tamper-evident proof records, recipients confirm or dispute them, and third parties verify the current status from a record ID. The core registry contract is open source and intended to run on Portaldot with POT used as gas for contract deployment and transactions.
+Issuers create tamper-evident proof records, recipients confirm or dispute them, and third parties verify the current status from a record ID. The core registry contract is open source and intended to run on a local Portaldot development node for the hackathon demo, with POT used as gas.
 
 ## Hackathon Fit
 
 - Built for Portaldot smart contracts.
-- Uses POT as gas when deployed to Portaldot.
+- Uses POT as gas on the local Portaldot node.
 - Runnable MVP with a React demo app.
 - Demo-ready flow: issue proof, confirm/dispute/revoke, verify by ID.
 - Core contract is open source in `contracts/portal_proof`.
@@ -62,10 +62,35 @@ An optional deployment helper is available at `scripts/deploy_portal_proof.py`. 
 
 ## Portaldot Settings
 
-- RPC: `wss://mainnet.portaldot.io`
+- Local RPC: `ws://127.0.0.1:9944`
+- Mainnet RPC: `wss://mainnet.portaldot.io`
 - SS58 format: `42`
 - Token: `POT`
 - Decimals: `14`
+
+## Local Node Quick Start
+
+Portaldot currently expects hackathon builders to run a local node and deploy there.
+
+```powershell
+wsl --update
+```
+
+Then, inside Ubuntu/WSL after downloading the Portaldot local development client:
+
+```bash
+tar -xzvf portaldot-testnet-ubuntu.tar.gz
+cd portaldot-testnet-ubuntu
+chmod 755 portaldot_dev
+./portaldot_dev --dev --alice
+```
+
+With the node running, fund the demo wallet locally:
+
+```powershell
+pip install -r scripts/requirements.txt
+python scripts/fund_local_account.py 5Gc3bLC4Cn1GUhhmRyfykRHTbS6YEKxQBR4oqXseLHcVumCi --amount 100
+```
 
 ## Demo Script
 

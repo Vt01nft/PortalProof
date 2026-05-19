@@ -1,8 +1,9 @@
+import os
 import sys
 
 from substrateinterface import SubstrateInterface
 
-PORTALDOT_RPC = "wss://mainnet.portaldot.io"
+PORTALDOT_RPC = os.environ.get("PORTALDOT_RPC", "ws://127.0.0.1:9944")
 SS58_FORMAT = 42
 TOKEN_DECIMALS = 14
 TOKEN_SYMBOL = "POT"

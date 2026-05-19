@@ -5,7 +5,7 @@ from pathlib import Path
 from substrateinterface import Keypair, SubstrateInterface
 from substrateinterface.contracts import ContractCode, ContractInstance
 
-PORTALDOT_RPC = "wss://mainnet.portaldot.io"
+PORTALDOT_RPC = os.environ.get("PORTALDOT_RPC", "ws://127.0.0.1:9944")
 SS58_FORMAT = 42
 
 
