@@ -285,6 +285,16 @@ function App() {
     URL.revokeObjectURL(url)
   }
 
+  function disconnectWallet() {
+    setWalletAccount(undefined)
+    setWalletBalance('')
+    setWalletStatus('Wallet disconnected.')
+    setForm((current) => ({
+      ...current,
+      issuer: initialForm.issuer,
+    }))
+  }
+
   async function connectWallet() {
     setWalletStatus('Requesting wallet access...')
 
@@ -420,10 +430,11 @@ function App() {
         <button
           className={walletAccount ? 'wallet-connected' : undefined}
           type="button"
-          onClick={connectWallet}
+          onClick={walletAccount ? disconnectWallet : connectWallet}
+          title={walletAccount ? 'Disconnect wallet' : 'Connect wallet'}
         >
           <Wallet size={18} aria-hidden="true" />
-          {walletAccount ? 'Wallet Connected' : 'Connect Wallet'}
+          {walletAccount ? 'Disconnect Wallet' : 'Connect Wallet'}
         </button>
       </section>
 

@@ -317,8 +317,9 @@
 }
 
 .wallet-strip button.wallet-connected {
-  color: #0f664f;
-  background: #d8f4e7;
+  color: #255a56;
+  border-color: rgba(37, 90, 86, 0.16);
+  background: #eef6f3;
   box-shadow: none;
 }
 
