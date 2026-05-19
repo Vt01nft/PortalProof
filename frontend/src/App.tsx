@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import {
+  Activity,
   BadgeCheck,
   Ban,
   ClipboardCheck,
@@ -195,6 +196,22 @@ function App() {
 
   return (
     <main className="app-shell">
+      <header className="topbar">
+        <div className="brand-lockup">
+          <div className="brand-mark" aria-hidden="true">
+            <ShieldCheck size={22} />
+          </div>
+          <div>
+            <strong>PortalProof</strong>
+            <span>verified care-grade records</span>
+          </div>
+        </div>
+        <div className="chain-pill">
+          <Activity size={16} aria-hidden="true" />
+          {PORTALDOT_CHAIN.name}
+        </div>
+      </header>
+
       <section className="hero-band">
         <div className="hero-copy">
           <span className="eyebrow">Portaldot proof registry</span>
@@ -204,24 +221,41 @@ function App() {
             certificates, then let recipients confirm, dispute, or verify them
             on-chain.
           </p>
+          <div className="hero-actions" aria-label="Demo readiness">
+            <span>Runnable MVP</span>
+            <span>Open contract</span>
+            <span>POT gas ready</span>
+          </div>
         </div>
 
-        <div className="network-panel" aria-label="Project readiness">
-          <div>
-            <span>Target chain</span>
-            <strong>{PORTALDOT_CHAIN.name}</strong>
+        <div className="hero-visual" aria-label="Project readiness">
+          <div className="synova-cross" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
           </div>
-          <div>
-            <span>Gas</span>
-            <strong>{PORTALDOT_CHAIN.tokenSymbol}</strong>
+          <div className="network-panel">
+            <div>
+              <span>Target chain</span>
+              <strong>{PORTALDOT_CHAIN.name}</strong>
+            </div>
+            <div>
+              <span>Gas</span>
+              <strong>{PORTALDOT_CHAIN.tokenSymbol}</strong>
+            </div>
+            <div>
+              <span>MVP records</span>
+              <strong>{records.length}</strong>
+            </div>
+            <div>
+              <span>Confirmed</span>
+              <strong>{confirmedCount}</strong>
+            </div>
           </div>
-          <div>
-            <span>MVP records</span>
-            <strong>{records.length}</strong>
-          </div>
-          <div>
-            <span>Confirmed</span>
-            <strong>{confirmedCount}</strong>
+          <div className="signal-card">
+            <span>Integrity layer</span>
+            <strong>Human-centered verification for delivery and asset records.</strong>
           </div>
         </div>
       </section>
@@ -403,7 +437,7 @@ function App() {
                 </span>
                 <h3>{record.title}</h3>
                 <p>
-                  #{record.id} · {record.recordType} · {record.reference}
+                  #{record.id} / {record.recordType} / {record.reference}
                 </p>
               </div>
 
