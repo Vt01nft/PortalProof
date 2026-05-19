@@ -5,10 +5,16 @@ import {
   BadgeCheck,
   Ban,
   ClipboardCheck,
+  Copy,
+  Download,
+  Filter,
   FileSearch,
+  HeartPulse,
   Plus,
   RefreshCcw,
+  Search,
   ShieldCheck,
+  Sparkles,
   TriangleAlert,
   Wallet,
 } from 'lucide-react'
@@ -67,6 +73,30 @@ const seedRecords: ProofRecord[] = [
     createdAt: '2026-05-17 09:10',
     updatedAt: '2026-05-17 09:10',
   },
+  {
+    id: 1003,
+    title: 'MRI machine warranty transfer',
+    recordType: 'Warranty certificate',
+    issuer: '5B7v...MedSupply',
+    recipient: '5J2p...Clinic',
+    metadataUri: 'ipfs://bafybeia-mri-warranty',
+    reference: 'MED-WAR-4412',
+    status: 'Disputed',
+    createdAt: '2026-05-17 14:35',
+    updatedAt: '2026-05-18 08:18',
+  },
+  {
+    id: 1004,
+    title: 'Cold-chain vaccine delivery',
+    recordType: 'Physical delivery',
+    issuer: '5E6q...Logistics',
+    recipient: '5K4t...Hospital',
+    metadataUri: 'ipfs://bafybeia-vaccine-cold-chain',
+    reference: 'VAC-LAG-0526',
+    status: 'Pending',
+    createdAt: '2026-05-18 11:42',
+    updatedAt: '2026-05-18 11:42',
+  },
 ]
 
 const initialForm: FormState = {
@@ -83,6 +113,31 @@ const statusTone: Record<ProofStatus, string> = {
   Confirmed: 'status confirmed',
   Disputed: 'status disputed',
   Revoked: 'status revoked',
+}
+
+const statuses: Array<'All' | ProofStatus> = [
+  'All',
+  'Pending',
+  'Confirmed',
+  'Disputed',
+  'Revoked',
+]
+
+const recordTypes = [
+  'All',
+  'Physical delivery',
+  'RWA certificate',
+  'Warranty certificate',
+  'Digital goods receipt',
+]
+
+const demoProof: FormState = {
+  title: 'Emergency oxygen concentrator delivery',
+  recordType: 'Physical delivery',
+  issuer: '5MED...Issuer',
+  recipient: '5CARE...Recipient',
+  metadataUri: 'ipfs://bafybeia-oxygen-concentrator-delivery',
+  reference: 'MED-OXY-0526',
 }
 
 function nowStamp() {
@@ -102,6 +157,10 @@ function App() {
   const [records, setRecords] = useState<ProofRecord[]>(seedRecords)
   const [form, setForm] = useState<FormState>(initialForm)
   const [query, setQuery] = useState('1001')
+  const [recordSearch, setRecordSearch] = useState('')
+  const [statusFilter, setStatusFilter] = useState<'All' | ProofStatus>('All')
+  const [typeFilter, setTypeFilter] = useState('All')
+  const [copyStatus, setCopyStatus] = useState('')
   const [walletAccount, setWalletAccount] = useState<WalletAccount>()
   const [walletBalance, setWalletBalance] = useState('')
   const [walletStatus, setWalletStatus] = useState(
@@ -119,6 +178,42 @@ function App() {
   const confirmedCount = records.filter(
     (record) => record.status === 'Confirmed',
   ).length
+  const pendingCount = records.filter((record) => record.status === 'Pending').length
+  const activeCount = records.filter((record) => record.status !== 'Revoked').length
+  const disputeCount = records.filter(
+    (record) => record.status === 'Disputed',
+  ).length
+
+  const filteredRecords = useMemo(() => {
+    const normalizedSearch = recordSearch.trim().toLowerCase()
+
+    return records.filter((record) => {
+      const matchesStatus =
+        statusFilter === 'All' || record.status === statusFilter
+      const matchesType = typeFilter === 'All' || record.recordType === typeFilter
+      const searchableText = [
+        record.id,
+        record.title,
+        record.recordType,
+        record.reference,
+        record.issuer,
+        record.recipient,
+        record.metadataUri,
+      ]
+        .join(' ')
+        .toLowerCase()
+
+      return (
+        matchesStatus &&
+        matchesType &&
+        (!normalizedSearch || searchableText.includes(normalizedSearch))
+      )
+    })
+  }, [recordSearch, records, statusFilter, typeFilter])
+
+  const selectedAttestation = selectedRecord
+    ? `PortalProof #${selectedRecord.id}: ${selectedRecord.status} / ${selectedRecord.reference} / ${selectedRecord.metadataUri}`
+    : ''
 
   function submitProof(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -155,6 +250,39 @@ function App() {
           : record,
       ),
     )
+  }
+
+  async function copyAttestation() {
+    if (!selectedAttestation) {
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(selectedAttestation)
+      setCopyStatus('Attestation copied.')
+    } catch {
+      setCopyStatus('Copy unavailable in this browser.')
+    }
+  }
+
+  function exportRecords() {
+    const payload = JSON.stringify(
+      {
+        exportedAt: nowStamp(),
+        chain: PORTALDOT_CHAIN,
+        records,
+      },
+      null,
+      2,
+    )
+    const blob = new Blob([payload], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+
+    link.href = url
+    link.download = 'portalproof-records.json'
+    link.click()
+    URL.revokeObjectURL(url)
   }
 
   async function connectWallet() {
@@ -249,8 +377,8 @@ function App() {
               <strong>{records.length}</strong>
             </div>
             <div>
-              <span>Confirmed</span>
-              <strong>{confirmedCount}</strong>
+              <span>Active</span>
+              <strong>{activeCount}</strong>
             </div>
           </div>
           <div className="signal-card">
@@ -258,6 +386,29 @@ function App() {
             <strong>Human-centered verification for delivery and asset records.</strong>
           </div>
         </div>
+      </section>
+
+      <section className="metrics-grid" aria-label="Proof registry metrics">
+        <article>
+          <span>Confirmed</span>
+          <strong>{confirmedCount}</strong>
+          <p>Recipient-approved records ready for third-party verification.</p>
+        </article>
+        <article>
+          <span>Pending</span>
+          <strong>{pendingCount}</strong>
+          <p>Proofs awaiting recipient action or final settlement.</p>
+        </article>
+        <article>
+          <span>Disputes</span>
+          <strong>{disputeCount}</strong>
+          <p>Records flagged for review before they become final.</p>
+        </article>
+        <article>
+          <span>Coverage</span>
+          <strong>{recordTypes.length - 1}</strong>
+          <p>Supported proof categories for the hackathon MVP.</p>
+        </article>
       </section>
 
       <section className="wallet-strip">
@@ -279,9 +430,19 @@ function App() {
 
       <section className="workspace-grid">
         <form className="proof-form" onSubmit={submitProof}>
-          <div className="section-title">
-            <Plus size={20} aria-hidden="true" />
-            <h2>Create Proof</h2>
+          <div className="panel-heading">
+            <div className="section-title">
+              <Plus size={20} aria-hidden="true" />
+              <h2>Create Proof</h2>
+            </div>
+            <button
+              className="ghost-action"
+              type="button"
+              onClick={() => setForm(demoProof)}
+            >
+              <Sparkles size={16} aria-hidden="true" />
+              Demo Fill
+            </button>
           </div>
 
           <label>
@@ -392,6 +553,10 @@ function App() {
               </div>
               <dl>
                 <div>
+                  <dt>Record</dt>
+                  <dd>#{selectedRecord.id}</dd>
+                </div>
+                <div>
                   <dt>Issuer</dt>
                   <dd>{selectedRecord.issuer}</dd>
                 </div>
@@ -412,6 +577,38 @@ function App() {
                   <dd>{selectedRecord.updatedAt}</dd>
                 </div>
               </dl>
+              <div className="attestation-box">
+                <span>Shareable attestation</span>
+                <p>{selectedAttestation}</p>
+                <button type="button" onClick={copyAttestation}>
+                  <Copy size={16} aria-hidden="true" />
+                  Copy
+                </button>
+              </div>
+              {copyStatus ? <p className="copy-status">{copyStatus}</p> : null}
+              <ol className="timeline" aria-label="Record timeline">
+                <li>
+                  <span />
+                  <div>
+                    <strong>Issued</strong>
+                    <p>{selectedRecord.createdAt}</p>
+                  </div>
+                </li>
+                <li>
+                  <span />
+                  <div>
+                    <strong>Latest status</strong>
+                    <p>{selectedRecord.status} at {selectedRecord.updatedAt}</p>
+                  </div>
+                </li>
+                <li>
+                  <span />
+                  <div>
+                    <strong>Verification surface</strong>
+                    <p>{PORTALDOT_CHAIN.tokenSymbol} gas / {PORTALDOT_CHAIN.name}</p>
+                  </div>
+                </li>
+              </ol>
             </article>
           ) : (
             <div className="empty-state">
@@ -423,13 +620,54 @@ function App() {
       </section>
 
       <section className="records-section">
-        <div className="section-title">
-          <BadgeCheck size={20} aria-hidden="true" />
-          <h2>Proof Records</h2>
+        <div className="records-header">
+          <div className="section-title">
+            <BadgeCheck size={20} aria-hidden="true" />
+            <h2>Proof Records</h2>
+          </div>
+          <button className="ghost-action" type="button" onClick={exportRecords}>
+            <Download size={16} aria-hidden="true" />
+            Export JSON
+          </button>
+        </div>
+
+        <div className="records-toolbar">
+          <label className="search-field">
+            <Search size={17} aria-hidden="true" />
+            <input
+              value={recordSearch}
+              onChange={(event) => setRecordSearch(event.target.value)}
+              placeholder="Search proofs, wallets, references..."
+            />
+          </label>
+          <label className="compact-field">
+            <Filter size={16} aria-hidden="true" />
+            <select
+              value={statusFilter}
+              onChange={(event) =>
+                setStatusFilter(event.target.value as 'All' | ProofStatus)
+              }
+            >
+              {statuses.map((status) => (
+                <option key={status}>{status}</option>
+              ))}
+            </select>
+          </label>
+          <label className="compact-field">
+            <HeartPulse size={16} aria-hidden="true" />
+            <select
+              value={typeFilter}
+              onChange={(event) => setTypeFilter(event.target.value)}
+            >
+              {recordTypes.map((recordType) => (
+                <option key={recordType}>{recordType}</option>
+              ))}
+            </select>
+          </label>
         </div>
 
         <div className="record-list">
-          {records.map((record) => (
+          {filteredRecords.map((record) => (
             <article className="record-card" key={record.id}>
               <div className="record-main">
                 <span className={statusTone[record.status]}>
@@ -480,6 +718,12 @@ function App() {
               </div>
             </article>
           ))}
+          {!filteredRecords.length ? (
+            <div className="empty-state">
+              <TriangleAlert size={20} aria-hidden="true" />
+              No proof records match the current filters.
+            </div>
+          ) : null}
         </div>
       </section>
     </main>

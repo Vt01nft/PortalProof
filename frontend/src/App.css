@@ -244,6 +244,45 @@
   background: rgba(255, 255, 255, 0.68);
 }
 
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  padding: 0 clamp(20px, 5vw, 72px) 22px;
+}
+
+.metrics-grid article {
+  min-height: 138px;
+  border: 1px solid rgba(37, 90, 86, 0.12);
+  border-radius: 8px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.metrics-grid span,
+.attestation-box span {
+  display: block;
+  color: #6c7a75;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metrics-grid strong {
+  display: block;
+  margin-top: 8px;
+  color: #142522;
+  font-size: 38px;
+  line-height: 1;
+}
+
+.metrics-grid p {
+  margin: 12px 0 0;
+  color: #63736e;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
 .wallet-strip span {
   display: block;
   color: #6c7a75;
@@ -268,7 +307,9 @@
 
 .wallet-strip button,
 .primary-action,
-.record-actions button {
+.record-actions button,
+.ghost-action,
+.attestation-box button {
   border: 1px solid transparent;
   border-radius: 8px;
   cursor: pointer;
@@ -299,6 +340,15 @@
   padding: 34px clamp(20px, 5vw, 72px);
 }
 
+.panel-heading,
+.records-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
 .proof-form,
 .verify-panel,
 .records-section {
@@ -312,6 +362,11 @@
   align-items: center;
   margin-bottom: 18px;
   color: #255a56;
+}
+
+.panel-heading .section-title,
+.records-header .section-title {
+  margin-bottom: 0;
 }
 
 .section-title h2 {
@@ -362,9 +417,32 @@ button:focus-visible {
   font-weight: 900;
 }
 
+.ghost-action,
+.attestation-box button {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 12px;
+  color: #255a56;
+  background: rgba(238, 246, 243, 0.88);
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.ghost-action:hover,
+.attestation-box button:hover {
+  border-color: rgba(37, 90, 86, 0.22);
+  background: #ffffff;
+}
+
 .primary-action:hover,
 .wallet-strip button:hover,
-.record-actions button:hover {
+.record-actions button:hover,
+.ghost-action:hover,
+.attestation-box button:hover {
   transform: translateY(-1px);
 }
 
@@ -377,6 +455,83 @@ button:focus-visible {
 
 .verification-result {
   padding: 18px;
+}
+
+.attestation-box {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  border: 1px solid rgba(37, 90, 86, 0.12);
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(238, 246, 243, 0.72);
+}
+
+.attestation-box p,
+.copy-status {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #304944;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.attestation-box button {
+  width: fit-content;
+}
+
+.copy-status {
+  margin-top: 8px;
+  color: #0f664f;
+  font-weight: 850;
+}
+
+.timeline {
+  display: grid;
+  gap: 0;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 12px;
+  padding-bottom: 16px;
+  color: #304944;
+}
+
+.timeline li:not(:last-child) {
+  border-left: 1px solid rgba(37, 90, 86, 0.18);
+  margin-left: 7px;
+  padding-left: 20px;
+}
+
+.timeline li:not(:last-child) > span {
+  margin-left: -28px;
+}
+
+.timeline li > span {
+  width: 13px;
+  height: 13px;
+  border: 3px solid #eef6f3;
+  border-radius: 999px;
+  margin-top: 3px;
+  background: #78aca7;
+  box-shadow: 0 0 0 1px rgba(37, 90, 86, 0.16);
+}
+
+.timeline strong {
+  display: block;
+  color: #142522;
+  font-size: 14px;
+}
+
+.timeline p {
+  margin: 3px 0 0;
+  color: #63736e;
+  font-size: 13px;
 }
 
 .result-heading {
@@ -429,6 +584,40 @@ dd {
 
 .records-section {
   padding: 6px clamp(20px, 5vw, 72px) 56px;
+}
+
+.records-toolbar {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(190px, 0.35fr) minmax(220px, 0.45fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.search-field,
+.compact-field {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  margin: 0;
+  border: 1px solid rgba(37, 90, 86, 0.12);
+  border-radius: 8px;
+  padding: 0 12px;
+  color: #255a56;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.search-field input,
+.compact-field select {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.search-field input:focus,
+.compact-field select:focus {
+  outline: 0;
 }
 
 .record-list {
@@ -504,7 +693,9 @@ dd {
 @media (max-width: 980px) {
   .hero-band,
   .workspace-grid,
-  .wallet-strip {
+  .wallet-strip,
+  .metrics-grid,
+  .records-toolbar {
     grid-template-columns: 1fr;
   }
 
