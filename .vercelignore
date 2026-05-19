@@ -1,0 +1,14 @@
+.git
+.github
+.local
+.vercel
+contracts/portal_proof/target
+frontend/dist
+frontend/node_modules
+node_modules
+target
+vendor
+*.log
+*.tar.gz
+__pycache__
+*.pyc

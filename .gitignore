@@ -10,3 +10,5 @@ vendor/*.tar.gz
 vendor/portaldot-node/
 vendor/wsl/
 .local/
+
+.vercel
