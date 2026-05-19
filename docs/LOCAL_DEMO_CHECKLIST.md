@@ -1,58 +1,45 @@
 # Local Demo Checklist
 
-Use this checklist for the PortalProof hackathon video and live demo.
+Use this checklist before recording or presenting PortalProof.
 
-## 1. Start The Local Node
+## 1. Start Portaldot
 
-In PowerShell, repair WSL if needed:
-
-```powershell
-wsl --update
-```
-
-From the repo root, use the helper:
+From the repo root:
 
 ```powershell
 .\scripts\start_portaldot_node_wsl.ps1
 ```
 
-For the Portaldot node-runner guide screenshot flow, use:
-
-```powershell
-.\scripts\start_portaldot_two_nodes_wsl.ps1
-```
-
-This starts Alice and Bob with `Vt01nft` in the node names and writes logs to:
-
-```text
-C:\PortalProof\.local\portaldot-alice.log
-C:\PortalProof\.local\portaldot-bob.log
-```
-
-On this WSL1 fallback setup, Bob still reports `0 peers`; the guide expects WSL2/native Linux/Codespaces for the `1 peers` screenshot.
-
-Or in Ubuntu/WSL:
-
-```bash
-tar -xzvf portaldot-testnet-ubuntu.tar.gz
-cd portaldot-testnet-ubuntu
-chmod 755 portaldot_dev
-./portaldot_dev --dev --alice
-```
-
-Keep this terminal open.
-
-## 2. Fund The Demo Wallet
-
-In PowerShell from the repo root:
+Confirm the chain is live:
 
 ```powershell
 cd frontend
 npm run chain:local
+```
+
+Expected result:
+
+```text
+Chain: Development
+Best block: #...
+```
+
+## 2. Fund The Demo Wallet
+
+```powershell
+cd frontend
 npm run fund:local -- 5Gc3bLC4Cn1GUhhmRyfykRHTbS6YEKxQBR4oqXseLHcVumCi 100
 ```
 
-## 3. Run The Frontend
+Expected result:
+
+```text
+After: 10000000000000000
+```
+
+This is local-only POT for the local Portaldot node.
+
+## 3. Run The App
 
 ```powershell
 cd frontend
@@ -60,17 +47,26 @@ npm install
 npm run dev
 ```
 
-Open http://127.0.0.1:5173.
+Open:
 
-## 4. Demo The MVP Flow
+```text
+http://127.0.0.1:5173
+```
 
-1. Connect the Portaldot wallet.
-2. Create a physical delivery proof.
-3. Create an RWA certificate proof.
-4. Confirm one proof.
-5. Dispute another proof.
-6. Verify a proof by record ID.
-7. Show the open-source contract in `contracts/portal_proof/src/lib.rs`.
+## 4. Demo Flow
+
+1. Show the PortalProof dashboard.
+2. Connect the wallet.
+3. Show that the button changes to `Disconnect Wallet`.
+4. Click `Autofill`.
+5. Issue a proof.
+6. Open the new record in the verification panel.
+7. Copy the shareable attestation.
+8. Confirm one record.
+9. Dispute another record.
+10. Search and filter the proof list.
+11. Export records as JSON.
+12. Show the open-source contract at `contracts/portal_proof/src/lib.rs`.
 
 ## 5. Contract Checks
 
@@ -80,17 +76,22 @@ cargo test
 cargo build --release --target wasm32-unknown-unknown --no-default-features
 ```
 
-## 6. Artifact Generation Status
+Expected test status:
 
-The contract compiles to Wasm locally. To produce the final ink! bundle with metadata, install `cargo-contract`:
-
-```powershell
-cargo install cargo-contract --version 4.1.1 --locked
-cd contracts/portal_proof
-cargo contract build --release
+```text
+7 passed
 ```
 
-On this Windows machine, the final artifact build succeeded inside the `UbuntuPortalProof` WSL distro with `cargo-contract 4.1.1` and Rust `1.85.1`. The generated artifacts are:
+## 6. ink! Artifact Build
+
+On this machine, the successful local artifact build used WSL, Rust `1.85.1`, and `cargo-contract 4.1.1`:
+
+```bash
+cd /mnt/c/PortalProof/contracts/portal_proof
+cargo +1.85.1 contract build --release
+```
+
+Generated artifacts:
 
 ```text
 contracts/portal_proof/target/ink/portal_proof.contract
@@ -98,6 +99,12 @@ contracts/portal_proof/target/ink/portal_proof.json
 contracts/portal_proof/target/ink/portal_proof.wasm
 ```
 
-## 7. Deployment Status
+## 7. Deployment Note
 
-Deployment currently reaches the local Portaldot runtime, but `Contracts.instantiate_with_code` returns `System.Other`. The same runtime error was reproduced with a fresh sample ink! flipper contract, so the next step is to confirm the exact ink!/cargo-contract version or known-good sample artifact expected by this Portaldot local node.
+The local node accepts chain queries and wallet transfers. Contract deployment reaches the Portaldot runtime but currently fails with:
+
+```text
+System.Other: Unspecified error occurred
+```
+
+The same runtime error appears for a fresh sample ink! contract. For the final on-chain deployment segment, ask Portaldot for the exact supported ink!/Rust/`cargo-contract` versions or a known-good sample artifact.

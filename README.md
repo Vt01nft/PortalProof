@@ -1,34 +1,39 @@
 # PortalProof
 
-PortalProof is a Portaldot hackathon MVP for proof-of-delivery records and real-world asset certificates.
+PortalProof is a Portaldot-powered proof registry for delivery confirmations and real-world asset records.
 
-Issuers create tamper-evident proof records, recipients confirm or dispute them, and third parties verify the current status from a record ID. The core registry contract is open source and intended to run on a local Portaldot development node for the hackathon demo, with POT used as gas.
+Issuers create tamper-evident proof records, recipients confirm or dispute them, and anyone can verify the latest record status by ID. The MVP includes a polished React demo app, an open-source ink! contract, Portaldot local-node tooling, wallet/POT gas helpers, and a demo-ready workflow.
 
-## Hackathon Fit
+## Submission Summary
 
 - Built for Portaldot smart contracts.
-- Uses POT as gas on the local Portaldot node.
-- Runnable MVP with a React demo app.
-- Demo-ready flow: issue proof, confirm/dispute/revoke, verify by ID.
-- Core contract is open source in `contracts/portal_proof`.
+- Uses POT as gas on the Portaldot local development node.
+- Provides a runnable React MVP.
+- Includes open-source core contract code in `contracts/portal_proof`.
+- Includes local node, wallet funding, build, deployment, and demo documentation.
+
+## What The Demo Shows
+
+1. Connect a Portaldot-compatible wallet.
+2. Create a proof for a delivery, warranty, digital receipt, or RWA certificate.
+3. Confirm, dispute, revoke, or reset proof status from the record list.
+4. Verify a record by ID.
+5. Search and filter records.
+6. Copy a shareable attestation.
+7. Export records as JSON.
 
 ## Repository Structure
 
 ```text
-contracts/portal_proof/  ink! smart contract
-docs/                    wallet and deployment notes
-frontend/                React + TypeScript MVP
-scripts/                 optional Portaldot helper scripts
+contracts/portal_proof/  Open-source ink! contract
+docs/                    Demo, wallet, deployment, and submission notes
+frontend/                React + TypeScript PortalProof app
+scripts/                 Local Portaldot node and deployment helpers
 ```
 
-## MVP Flow
+## Quick Start
 
-1. An issuer creates a delivery or RWA certificate proof.
-2. The recipient confirms receipt or disputes the proof.
-3. The issuer can revoke a non-confirmed proof.
-4. Anyone can verify the proof by record ID.
-
-## Run The Frontend
+Install frontend dependencies and run the app:
 
 ```bash
 cd frontend
@@ -36,93 +41,107 @@ npm install
 npm run dev
 ```
 
-## Test The Contract
+Open:
 
-```bash
-cd contracts/portal_proof
-cargo test
-cargo build --release --target wasm32-unknown-unknown --no-default-features
+```text
+http://127.0.0.1:5173
 ```
 
-## Build For Deployment
+## Local Portaldot Node
 
-Install `cargo-contract`, then build the contract bundle:
-
-```bash
-cargo install cargo-contract
-cd contracts/portal_proof
-cargo contract build --release
-```
-
-The generated contract artifacts are written to `contracts/portal_proof/target/ink/`. Deployment and contract calls require a Portaldot-compatible wallet funded with POT for gas.
-
-See `docs/WALLET_AND_DEPLOYMENT.md` for wallet setup, POT gas notes, Portaldot chain settings, and the planned deployment path.
-See `docs/LOCAL_DEMO_CHECKLIST.md` for the local-node video/demo checklist.
-
-An optional deployment helper is available at `scripts/deploy_portal_proof.py`. It expects generated ink! metadata and Wasm files plus a local `PORTALPROOF_DEPLOYER_URI` environment variable.
-
-## Portaldot Settings
-
-- Local RPC: `ws://127.0.0.1:9944`
-- Mainnet RPC: `wss://mainnet.portaldot.io`
-- SS58 format: `42`
-- Token: `POT`
-- Decimals: `14`
-
-## Local Node Quick Start
-
-Portaldot currently expects hackathon builders to run a local node and deploy there.
-
-```powershell
-wsl --update
-```
-
-This repo includes a launcher for the downloaded Portaldot local development client:
+From the repo root on Windows/WSL:
 
 ```powershell
 .\scripts\start_portaldot_node_wsl.ps1
 ```
 
-For the Portaldot node-runner guide flow, this repo also includes a two-node launcher that starts Alice and Bob with `Vt01nft` in the node names:
-
-```powershell
-.\scripts\start_portaldot_two_nodes_wsl.ps1
-```
-
-Or, inside Ubuntu/WSL after downloading the Portaldot local development client:
-
-```bash
-tar -xzvf portaldot-testnet-ubuntu.tar.gz
-cd portaldot-testnet-ubuntu
-chmod 755 portaldot_dev
-./portaldot_dev --dev --alice
-```
-
-With the node running, fund the demo wallet locally:
+Verify the local chain:
 
 ```powershell
 cd frontend
 npm run chain:local
+```
+
+Fund the demo wallet with local POT:
+
+```powershell
+cd frontend
 npm run fund:local -- 5Gc3bLC4Cn1GUhhmRyfykRHTbS6YEKxQBR4oqXseLHcVumCi 100
 ```
 
-Start the frontend with local Portaldot settings:
+This sends local-only POT from the dev account `//Alice`. It does not move mainnet funds.
 
-```powershell
-.\scripts\start_frontend_local.ps1
+## Contract
+
+The open-source contract is here:
+
+```text
+contracts/portal_proof/src/lib.rs
 ```
 
-## Demo Script
+Run contract tests:
 
-1. Open the app and show the Portaldot/POT readiness panel.
-2. Create a new proof for a physical delivery or RWA certificate.
-3. Use the record list to confirm or dispute the proof.
-4. Search the record ID in the verification panel.
-5. Explain that these actions map to the open-source contract messages:
-   `create_record`, `confirm_record`, `dispute_record`, `revoke_record`, and `get_record`.
+```bash
+cd contracts/portal_proof
+cargo test
+```
 
-## Current Local Deployment Note
+Build raw Wasm:
 
-The local node is reachable and the contract bundle builds with `cargo-contract 4.1.1` under Rust `1.85.1`. Low-level `Contracts.instantiate_with_code` deployment reaches the Portaldot runtime, but the current local node returns `System.Other` for PortalProof and for a fresh sample ink! flipper contract. That suggests a Portaldot local-node/runtime/toolchain compatibility issue rather than a PortalProof contract logic failure.
+```bash
+cd contracts/portal_proof
+cargo build --release --target wasm32-unknown-unknown --no-default-features
+```
 
-The community node-runner guide at https://github.com/Investorquab/portaldot-node-guide was also tested. Alice and Bob start with the expected flags and ports, but on this WSL1 setup Bob remains at `0 peers`; use WSL2/native Linux or Codespaces for the guide screenshot if the peer count is required.
+Build ink! artifacts with `cargo-contract`:
+
+```bash
+cd contracts/portal_proof
+cargo +1.85.1 contract build --release
+```
+
+Generated local artifacts:
+
+```text
+contracts/portal_proof/target/ink/portal_proof.contract
+contracts/portal_proof/target/ink/portal_proof.json
+contracts/portal_proof/target/ink/portal_proof.wasm
+```
+
+## Portaldot Settings
+
+| Setting | Value |
+| --- | --- |
+| Local WebSocket RPC | `ws://127.0.0.1:9944` |
+| Mainnet WebSocket RPC | `wss://mainnet.portaldot.io` |
+| Token | `POT` |
+| Decimals | `14` |
+| SS58 format | `42` |
+| Contract pallet | `Contracts` |
+
+## Deployment Status
+
+The local Portaldot node is reachable, the wallet is funded with local POT, and the contract builds successfully. Deployment currently reaches `Contracts.instantiate_with_code`, but the provided local runtime returns:
+
+```text
+System.Other: Unspecified error occurred
+```
+
+The same error was reproduced with a fresh sample ink! contract, which points to a Portaldot local-node/runtime/toolchain compatibility issue rather than PortalProof business logic.
+
+The next required Portaldot-side answer is the exact supported ink!, Rust, and `cargo-contract` version, or a known-good sample artifact for this node.
+
+## Docs
+
+- `docs/LOCAL_DEMO_CHECKLIST.md`: exact steps for recording the demo.
+- `docs/DEMO_SCRIPT.md`: short video narration and shot list.
+- `docs/WALLET_AND_DEPLOYMENT.md`: wallet, POT, local node, and deployment notes.
+- `docs/SUBMISSION_CHECKLIST.md`: final hackathon submission checklist.
+
+## GitHub
+
+Repository:
+
+```text
+https://github.com/Vt01nft/PortalProof
+```
