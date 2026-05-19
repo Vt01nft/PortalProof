@@ -57,6 +57,7 @@ cargo contract build --release
 The generated contract artifact can be deployed to Portaldot. Deployment and contract calls require a Portaldot-compatible wallet funded with POT for gas.
 
 See `docs/WALLET_AND_DEPLOYMENT.md` for wallet setup, POT gas notes, Portaldot chain settings, and the planned deployment path.
+See `docs/LOCAL_DEMO_CHECKLIST.md` for the local-node video/demo checklist.
 
 An optional deployment helper is available at `scripts/deploy_portal_proof.py`. It expects generated ink! metadata and Wasm files plus a local `PORTALPROOF_DEPLOYER_URI` environment variable.
 
@@ -90,6 +91,12 @@ With the node running, fund the demo wallet locally:
 ```powershell
 pip install -r scripts/requirements.txt
 python scripts/fund_local_account.py 5Gc3bLC4Cn1GUhhmRyfykRHTbS6YEKxQBR4oqXseLHcVumCi --amount 100
+```
+
+Start the frontend with local Portaldot settings:
+
+```powershell
+.\scripts\start_frontend_local.ps1
 ```
 
 ## Demo Script
