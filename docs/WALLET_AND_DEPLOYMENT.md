@@ -40,6 +40,14 @@ The Portaldot docs recommend WSL for Windows users. This repo has been tested wi
 .\scripts\start_portaldot_node_wsl.ps1
 ```
 
+The community two-node guide is also supported by:
+
+```powershell
+.\scripts\start_portaldot_two_nodes_wsl.ps1
+```
+
+That launcher matches the Alice/Bob names, base paths, ports, bootnode flag, and log files from the guide. On this PC's WSL1 fallback, the nodes start but remain at `0 peers`; WSL2, native Linux, or Codespaces is recommended if Portaldot requires the `1 peers` node-runner screenshot.
+
 You can also install or open an Ubuntu WSL distro manually and follow Portaldot's local development node instructions:
 
 ```bash

@@ -83,6 +83,12 @@ This repo includes a launcher for the downloaded Portaldot local development cli
 .\scripts\start_portaldot_node_wsl.ps1
 ```
 
+For the Portaldot node-runner guide flow, this repo also includes a two-node launcher that starts Alice and Bob with `Vt01nft` in the node names:
+
+```powershell
+.\scripts\start_portaldot_two_nodes_wsl.ps1
+```
+
 Or, inside Ubuntu/WSL after downloading the Portaldot local development client:
 
 ```bash
@@ -118,3 +124,5 @@ Start the frontend with local Portaldot settings:
 ## Current Local Deployment Note
 
 The local node is reachable and the contract bundle builds with `cargo-contract 4.1.1` under Rust `1.85.1`. Low-level `Contracts.instantiate_with_code` deployment reaches the Portaldot runtime, but the current local node returns `System.Other` for PortalProof and for a fresh sample ink! flipper contract. That suggests a Portaldot local-node/runtime/toolchain compatibility issue rather than a PortalProof contract logic failure.
+
+The community node-runner guide at https://github.com/Investorquab/portaldot-node-guide was also tested. Alice and Bob start with the expected flags and ports, but on this WSL1 setup Bob remains at `0 peers`; use WSL2/native Linux or Codespaces for the guide screenshot if the peer count is required.

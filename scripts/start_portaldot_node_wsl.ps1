@@ -1,3 +1,8 @@
+param(
+  [string]$Distro = "UbuntuPortalProof",
+  [string]$Name = "Vt01nft"
+)
+
 $ErrorActionPreference = "Stop"
 
 $nodeDir = "C:\PortalProof\vendor\portaldot-node"
@@ -14,6 +19,13 @@ if (!(Test-Path $nodeBin)) {
 }
 
 $wslPath = "/mnt/c/PortalProof/vendor/portaldot-node"
-$command = "cd $wslPath && chmod 755 ./portaldot_dev && ./portaldot_dev --dev --alice"
+$logDir = "C:\PortalProof\.local"
+$logFile = Join-Path $logDir "portaldot-node.err.log"
+New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 
-Start-Process -FilePath "wsl.exe" -ArgumentList "--cd", "~", "--exec", "bash", "-lc", $command
+$wslLogFile = "/mnt/c/PortalProof/.local/portaldot-node.err.log"
+$command = "cd $wslPath && chmod 755 ./portaldot_dev && ./portaldot_dev --dev --alice --name '${Name}-alice' --base-path /tmp/portalproof-alice > '$wslLogFile' 2>&1"
+
+Start-Process -WindowStyle Hidden -FilePath "wsl.exe" -ArgumentList "-d $Distro --cd ~ --exec bash -lc `"$command`""
+Write-Host "Portaldot Alice node starting with name '${Name}-alice'."
+Write-Host "Log: $logFile"

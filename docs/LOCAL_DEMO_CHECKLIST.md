@@ -16,6 +16,21 @@ From the repo root, use the helper:
 .\scripts\start_portaldot_node_wsl.ps1
 ```
 
+For the Portaldot node-runner guide screenshot flow, use:
+
+```powershell
+.\scripts\start_portaldot_two_nodes_wsl.ps1
+```
+
+This starts Alice and Bob with `Vt01nft` in the node names and writes logs to:
+
+```text
+C:\PortalProof\.local\portaldot-alice.log
+C:\PortalProof\.local\portaldot-bob.log
+```
+
+On this WSL1 fallback setup, Bob still reports `0 peers`; the guide expects WSL2/native Linux/Codespaces for the `1 peers` screenshot.
+
 Or in Ubuntu/WSL:
 
 ```bash
