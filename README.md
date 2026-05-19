@@ -89,8 +89,9 @@ chmod 755 portaldot_dev
 With the node running, fund the demo wallet locally:
 
 ```powershell
-pip install -r scripts/requirements.txt
-python scripts/fund_local_account.py 5Gc3bLC4Cn1GUhhmRyfykRHTbS6YEKxQBR4oqXseLHcVumCi --amount 100
+cd frontend
+npm run chain:local
+npm run fund:local -- 5Gc3bLC4Cn1GUhhmRyfykRHTbS6YEKxQBR4oqXseLHcVumCi 100
 ```
 
 Start the frontend with local Portaldot settings:

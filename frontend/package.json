@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "chain:local": "node scripts/check-local-chain.mjs",
+    "fund:local": "node scripts/fund-local-wallet.mjs"
   },
   "dependencies": {
     "@polkadot/api": "^16.5.6",

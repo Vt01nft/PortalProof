@@ -26,9 +26,9 @@ Keep this terminal open.
 In PowerShell from the repo root:
 
 ```powershell
-pip install -r scripts/requirements.txt
-python scripts/fund_local_account.py 5Gc3bLC4Cn1GUhhmRyfykRHTbS6YEKxQBR4oqXseLHcVumCi --amount 100
-python scripts/check_portaldot_balance.py 5Gc3bLC4Cn1GUhhmRyfykRHTbS6YEKxQBR4oqXseLHcVumCi
+cd frontend
+npm run chain:local
+npm run fund:local -- 5Gc3bLC4Cn1GUhhmRyfykRHTbS6YEKxQBR4oqXseLHcVumCi 100
 ```
 
 ## 3. Run The Frontend
