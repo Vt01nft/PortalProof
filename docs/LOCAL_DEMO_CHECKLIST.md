@@ -10,7 +10,13 @@ In PowerShell, repair WSL if needed:
 wsl --update
 ```
 
-In Ubuntu/WSL:
+From the repo root, use the helper:
+
+```powershell
+.\scripts\start_portaldot_node_wsl.ps1
+```
+
+Or in Ubuntu/WSL:
 
 ```bash
 tar -xzvf portaldot-testnet-ubuntu.tar.gz
@@ -49,7 +55,7 @@ Open http://127.0.0.1:5173.
 4. Confirm one proof.
 5. Dispute another proof.
 6. Verify a proof by record ID.
-7. Show the open-source contract in `contracts/portal_proof/lib.rs`.
+7. Show the open-source contract in `contracts/portal_proof/src/lib.rs`.
 
 ## 5. Contract Checks
 
@@ -69,4 +75,14 @@ cd contracts/portal_proof
 cargo contract build --release
 ```
 
-On this Windows machine, compiling `cargo-contract` from source timed out twice. The practical fallback is to run the install inside a working Ubuntu/WSL environment after `wsl --update`, or use a prebuilt `cargo-contract` binary if Portaldot provides one.
+On this Windows machine, the final artifact build succeeded inside the `UbuntuPortalProof` WSL distro with `cargo-contract 4.1.1` and Rust `1.85.1`. The generated artifacts are:
+
+```text
+contracts/portal_proof/target/ink/portal_proof.contract
+contracts/portal_proof/target/ink/portal_proof.json
+contracts/portal_proof/target/ink/portal_proof.wasm
+```
+
+## 7. Deployment Status
+
+Deployment currently reaches the local Portaldot runtime, but `Contracts.instantiate_with_code` returns `System.Other`. The same runtime error was reproduced with a fresh sample ink! flipper contract, so the next step is to confirm the exact ink!/cargo-contract version or known-good sample artifact expected by this Portaldot local node.

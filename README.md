@@ -54,7 +54,7 @@ cd contracts/portal_proof
 cargo contract build --release
 ```
 
-The generated contract artifact can be deployed to Portaldot. Deployment and contract calls require a Portaldot-compatible wallet funded with POT for gas.
+The generated contract artifacts are written to `contracts/portal_proof/target/ink/`. Deployment and contract calls require a Portaldot-compatible wallet funded with POT for gas.
 
 See `docs/WALLET_AND_DEPLOYMENT.md` for wallet setup, POT gas notes, Portaldot chain settings, and the planned deployment path.
 See `docs/LOCAL_DEMO_CHECKLIST.md` for the local-node video/demo checklist.
@@ -77,7 +77,13 @@ Portaldot currently expects hackathon builders to run a local node and deploy th
 wsl --update
 ```
 
-Then, inside Ubuntu/WSL after downloading the Portaldot local development client:
+This repo includes a launcher for the downloaded Portaldot local development client:
+
+```powershell
+.\scripts\start_portaldot_node_wsl.ps1
+```
+
+Or, inside Ubuntu/WSL after downloading the Portaldot local development client:
 
 ```bash
 tar -xzvf portaldot-testnet-ubuntu.tar.gz
@@ -108,3 +114,7 @@ Start the frontend with local Portaldot settings:
 4. Search the record ID in the verification panel.
 5. Explain that these actions map to the open-source contract messages:
    `create_record`, `confirm_record`, `dispute_record`, `revoke_record`, and `get_record`.
+
+## Current Local Deployment Note
+
+The local node is reachable and the contract bundle builds with `cargo-contract 4.1.1` under Rust `1.85.1`. Low-level `Contracts.instantiate_with_code` deployment reaches the Portaldot runtime, but the current local node returns `System.Other` for PortalProof and for a fresh sample ink! flipper contract. That suggests a Portaldot local-node/runtime/toolchain compatibility issue rather than a PortalProof contract logic failure.

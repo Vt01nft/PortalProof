@@ -34,13 +34,13 @@ The app also tries the standard Polkadot extension interface, so a Polkadot-comp
 
 ## Run A Local Portaldot Node
 
-The Portaldot docs recommend WSL for Windows users. On this PC, WSL is present but currently reports that the WSL 2 kernel is missing, so run this once in PowerShell:
+The Portaldot docs recommend WSL for Windows users. This repo has been tested with a local WSL distro named `UbuntuPortalProof` and a helper script:
 
 ```powershell
-wsl --update
+.\scripts\start_portaldot_node_wsl.ps1
 ```
 
-Then install or open an Ubuntu WSL distro and follow Portaldot's local development node instructions:
+You can also install or open an Ubuntu WSL distro manually and follow Portaldot's local development node instructions:
 
 ```bash
 tar -xzvf portaldot-testnet-ubuntu.tar.gz
@@ -86,7 +86,7 @@ Copy `frontend/.env.example` to `frontend/.env.local` only if you need to overri
 
 ## Contract Build
 
-The contract is written with stable ink! `5.1.1`, matching the Portaldot docs' Substrate `Contracts` pallet style.
+The contract is written with stable ink! `5.1.1`.
 
 ```bash
 cd contracts/portal_proof
@@ -94,15 +94,16 @@ cargo test
 cargo build --release --target wasm32-unknown-unknown --no-default-features
 ```
 
-To generate deployable artifacts, install a compatible `cargo-contract` version and build:
+To generate deployable artifacts, install a compatible `cargo-contract` version and build. On this machine the successful combination was `cargo-contract 4.1.1` with Rust `1.85.1` inside WSL:
 
 ```bash
-cargo install cargo-contract
+cargo install cargo-contract --version 4.1.1 --locked
+rustup toolchain install 1.85.1 --component rust-src,clippy,rustfmt
 cd contracts/portal_proof
-cargo contract build --release
+cargo +1.85.1 contract build --release
 ```
 
-Expected artifacts are generated under `contracts/portal_proof/target/ink/`. If `cargo-contract` is not available yet, the raw Wasm compile check still verifies that the contract is Wasm-ready.
+Expected artifacts are generated under `contracts/portal_proof/target/ink/`.
 
 ## Local Deployment Path
 
@@ -122,6 +123,8 @@ python scripts/deploy_portal_proof.py --metadata <path-to-json> --wasm <path-to-
 ```
 
 Only use `//Alice` on the local dev node. For mainnet, use your own local secret URI and never commit it, paste it into chat, or put it in a `.env` file that might be uploaded.
+
+Current status: the helper script reaches the local Portaldot runtime, but `Contracts.instantiate_with_code` returns `System.Other`. The same error was reproduced with a fresh sample ink! flipper contract, so this appears to be a local Portaldot node/runtime/toolchain compatibility issue. Ask the Portaldot team for the exact supported ink!/cargo-contract version or a known-good contract artifact for this local node before recording the final on-chain deployment segment.
 
 ## Mainnet Gas Later
 

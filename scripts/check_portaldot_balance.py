@@ -23,7 +23,7 @@ def main() -> int:
     portaldot = SubstrateInterface(
         url=PORTALDOT_RPC,
         ss58_format=SS58_FORMAT,
-        type_registry_preset="default",
+        type_registry_preset="substrate-node-template",
     )
 
     result = portaldot.query("System", "Account", [address])

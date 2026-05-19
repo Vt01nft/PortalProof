@@ -26,7 +26,7 @@ def main() -> int:
     portaldot = SubstrateInterface(
         url=PORTALDOT_RPC,
         ss58_format=SS58_FORMAT,
-        type_registry_preset="default",
+        type_registry_preset="substrate-node-template",
     )
     alice = Keypair.create_from_uri("//Alice", ss58_format=SS58_FORMAT)
     value = int(args.amount * 10**TOKEN_DECIMALS)
