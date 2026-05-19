@@ -6,3 +6,5 @@ target/
 *.log
 __pycache__/
 *.pyc
+vendor/*.tar.gz
+vendor/portaldot-node/
