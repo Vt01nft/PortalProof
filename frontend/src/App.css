@@ -316,6 +316,12 @@
   font-weight: 900;
 }
 
+.wallet-strip button.wallet-connected {
+  color: #0f664f;
+  background: #d8f4e7;
+  box-shadow: none;
+}
+
 .workspace-grid {
   display: grid;
   grid-template-columns: minmax(320px, 0.9fr) minmax(320px, 1.1fr);

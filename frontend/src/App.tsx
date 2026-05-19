@@ -417,9 +417,13 @@ function App() {
           {walletAccount ? <p>{walletAccount.address}</p> : <p>{walletStatus}</p>}
           {walletBalance ? <p>{walletBalance}</p> : null}
         </div>
-        <button type="button" onClick={connectWallet}>
+        <button
+          className={walletAccount ? 'wallet-connected' : undefined}
+          type="button"
+          onClick={connectWallet}
+        >
           <Wallet size={18} aria-hidden="true" />
-          Connect Wallet
+          {walletAccount ? 'Wallet Connected' : 'Connect Wallet'}
         </button>
       </section>
 
