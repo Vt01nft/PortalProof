@@ -349,11 +349,6 @@ function App() {
             certificates, then let recipients confirm, dispute, or verify them
             on-chain.
           </p>
-          <div className="hero-actions" aria-label="Demo readiness">
-            <span>Runnable MVP</span>
-            <span>Open contract</span>
-            <span>POT gas ready</span>
-          </div>
         </div>
 
         <div className="hero-visual" aria-label="Project readiness">
@@ -373,7 +368,7 @@ function App() {
               <strong>{PORTALDOT_CHAIN.tokenSymbol}</strong>
             </div>
             <div>
-              <span>MVP records</span>
+              <span>Total records</span>
               <strong>{records.length}</strong>
             </div>
             <div>
@@ -405,9 +400,9 @@ function App() {
           <p>Records flagged for review before they become final.</p>
         </article>
         <article>
-          <span>Coverage</span>
+          <span>Categories</span>
           <strong>{recordTypes.length - 1}</strong>
-          <p>Supported proof categories for the hackathon MVP.</p>
+          <p>Record types available for delivery and asset verification.</p>
         </article>
       </section>
 
@@ -435,13 +430,9 @@ function App() {
               <Plus size={20} aria-hidden="true" />
               <h2>Create Proof</h2>
             </div>
-            <button
-              className="ghost-action"
-              type="button"
-              onClick={() => setForm(demoProof)}
-            >
+            <button className="ghost-action" type="button" onClick={() => setForm(demoProof)}>
               <Sparkles size={16} aria-hidden="true" />
-              Demo Fill
+              Autofill
             </button>
           </div>
 

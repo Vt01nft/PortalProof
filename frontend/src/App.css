@@ -104,23 +104,6 @@
   line-height: 1.65;
 }
 
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 28px;
-}
-
-.hero-actions span {
-  border: 1px solid rgba(37, 90, 86, 0.14);
-  border-radius: 999px;
-  padding: 9px 13px;
-  color: #244b48;
-  background: rgba(255, 255, 255, 0.62);
-  font-size: 13px;
-  font-weight: 850;
-}
-
 .hero-visual {
   position: relative;
   min-height: 430px;
