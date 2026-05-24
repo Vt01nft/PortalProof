@@ -1,11 +1,14 @@
 # PortalProof
 
+![PortalProof logo](frontend/public/portalproof-logo.png)
+
 PortalProof is a Portaldot-powered proof registry for delivery confirmations and real-world asset records.
 
 Issuers create tamper-evident proof records, recipients confirm or dispute them, and anyone can verify the latest record status by ID. The MVP includes a polished React demo app, an open-source ink! contract, Portaldot local-node tooling, wallet/POT gas helpers, and a demo-ready workflow.
 
 ## Submission Summary
 
+- Live app: `https://portalproof.vercel.app`
 - Built for Portaldot smart contracts.
 - Uses POT as gas on the Portaldot local development node.
 - Provides a runnable React MVP.

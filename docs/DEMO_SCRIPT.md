@@ -6,6 +6,12 @@ Target length: 2 to 4 minutes.
 
 PortalProof is a proof registry built for Portaldot. It helps issuers create delivery, warranty, digital receipt, and real-world asset proof records. Recipients can confirm or dispute those records, and anyone can verify the latest status from a record ID.
 
+Live app:
+
+```text
+https://portalproof.vercel.app
+```
+
 ## Shot List
 
 ### 1. Repository
@@ -43,11 +49,12 @@ Mention:
 Open:
 
 ```text
-http://127.0.0.1:5173
+https://portalproof.vercel.app
 ```
 
 Show:
 
+- PortalProof logo and brand identity.
 - Dashboard metrics.
 - Wallet section.
 - Create proof panel.

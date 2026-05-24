@@ -21,28 +21,23 @@
   gap: 12px;
 }
 
-.brand-mark {
-  display: grid;
-  width: 46px;
-  height: 46px;
-  place-items: center;
-  border-radius: 8px;
-  color: #f8f7f2;
-  background: #255a56;
-  box-shadow: 0 14px 34px rgba(37, 90, 86, 0.22);
+.brand-logo {
+  display: block;
+  width: 54px;
+  height: auto;
 }
 
-.brand-lockup strong,
-.brand-lockup span {
+.brand-wordmark strong,
+.brand-wordmark span {
   display: block;
 }
 
-.brand-lockup strong {
+.brand-wordmark strong {
   color: #14312e;
   font-size: 18px;
 }
 
-.brand-lockup span {
+.brand-wordmark span {
   color: #63736e;
   font-size: 13px;
   font-weight: 750;

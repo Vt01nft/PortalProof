@@ -53,6 +53,12 @@ Open:
 http://127.0.0.1:5173
 ```
 
+Live deployed app:
+
+```text
+https://portalproof.vercel.app
+```
+
 ## 4. Demo Flow
 
 1. Show the PortalProof dashboard.

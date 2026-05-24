@@ -15,6 +15,7 @@
 
 ```text
 https://github.com/Vt01nft/PortalProof
+https://portalproof.vercel.app
 ```
 
 ## Run Commands
@@ -44,6 +45,7 @@ npm run chain:local
 ## Final Demo Must Show
 
 - Wallet connect and disconnect.
+- PortalProof logo and branding.
 - Proof creation.
 - Record verification.
 - Shareable attestation copy.

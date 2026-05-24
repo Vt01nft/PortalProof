@@ -336,10 +336,8 @@ function App() {
     <main className="app-shell">
       <header className="topbar">
         <div className="brand-lockup">
-          <div className="brand-mark" aria-hidden="true">
-            <ShieldCheck size={22} />
-          </div>
-          <div>
+          <img className="brand-logo" src="/portalproof-icon.png" alt="" aria-hidden="true" />
+          <div className="brand-wordmark">
             <strong>PortalProof</strong>
             <span>verified care-grade records</span>
           </div>
